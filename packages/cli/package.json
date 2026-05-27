@@ -1,11 +1,11 @@
 {
   "name": "@zhad0/cli",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "CLI for the ZHAD0 Protocol — encrypt intents, simulate proofs, inspect status, run diagnostics.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "zhad0": "./bin/zhad0"
+    "zhad0": "bin/zhad0.js"
   },
   "files": [
     "bin",
