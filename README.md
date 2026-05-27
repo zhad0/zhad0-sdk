@@ -5,7 +5,7 @@
   > **Status: DESIGN_PREVIEW `v0.0.0-design.1`.** Real AES-256-GCM client-side encryption is shipped today. ZK proofs and the Ghost Relay network are simulated until mainnet is live.
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-  [![Status](https://img.shields.io/badge/status-design__preview-ff3d8a.svg)](https://zhad0.io)
+  [![Status](https://img.shields.io/badge/status-live-00d26a.svg)](https://zhad0.io)
   [![Network](https://img.shields.io/badge/network-Base__L2-0052ff.svg)](https://base.org)
 
   ## What is ZHAD0
