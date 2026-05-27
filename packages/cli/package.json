@@ -1,0 +1,53 @@
+{
+  "name": "@zhad0/cli",
+  "version": "0.0.0-design.1",
+  "description": "Command line interface for the ZHAD0 privacy SDK. Encrypt intents, simulate ZK proofs, inspect SDK status.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "zhad0": "./bin/zhad0.mjs"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "zhad0",
+    "cli",
+    "zk",
+    "privacy",
+    "ai-agents",
+    "base",
+    "base-l2",
+    "encryption",
+    "aes-gcm"
+  ],
+  "homepage": "https://zhad0.xyz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhad0/zhad0-sdk.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/zhad0/zhad0-sdk/issues"
+  },
+  "author": "ZHAD0 Protocol <dev@zhad0.xyz>",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "dependencies": {
+    "@zhad0/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
