@@ -24,7 +24,7 @@ import { SDK_STATUS } from "@zhad0/sdk";
     zhad0 encrypt ./intent.json
     zhad0 simulate ./intent.json --pretty
 
-  Docs: https://zhad0.xyz
+  Docs: https://zhad0.io
   `;
 
   type Flags = Record<string, string | boolean>;

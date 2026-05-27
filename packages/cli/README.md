@@ -1,6 +1,6 @@
 # @zhad0/cli
 
-  Command line interface for the [ZHAD0](https://zhad0.xyz) privacy SDK.
+  Command line interface for the [ZHAD0](https://zhad0.io) privacy SDK.
 
   > **Status: DESIGN_PREVIEW `v0.0.0-design.1`.** Encryption is real. Proof and relayer submission are simulated until mainnet.
 

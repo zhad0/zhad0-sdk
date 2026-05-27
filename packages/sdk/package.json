@@ -31,7 +31,7 @@
     "ghost-relay",
     "mev-protection"
   ],
-  "homepage": "https://zhad0.xyz",
+  "homepage": "https://zhad0.io",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhad0/zhad0-sdk.git",
@@ -40,7 +40,7 @@
   "bugs": {
     "url": "https://github.com/zhad0/zhad0-sdk/issues"
   },
-  "author": "ZHAD0 Protocol <dev@zhad0.xyz>",
+  "author": "zhad0",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean"

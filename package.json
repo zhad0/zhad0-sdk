@@ -4,7 +4,7 @@
   "description": "ZHAD0 SDK + CLI monorepo. ZK privacy layer for AI agents on Base L2.",
   "private": true,
   "type": "module",
-  "homepage": "https://zhad0.xyz",
+  "homepage": "https://zhad0.io",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhad0/zhad0-sdk.git"
@@ -13,7 +13,7 @@
     "url": "https://github.com/zhad0/zhad0-sdk/issues"
   },
   "license": "MIT",
-  "author": "ZHAD0 Protocol <dev@zhad0.xyz>",
+  "author": "zhad0",
   "scripts": {
     "build": "tsc --build",
     "typecheck": "tsc --build",
