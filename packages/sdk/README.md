@@ -31,7 +31,7 @@
   | `simulateProof()` SHA-256 stand-in for RISC Zero | SIMULATED |
   | `submitIntent()` returns `txHash: null` | SIMULATED |
   | Ghost Relay network submission | PLANNED |
-  | Base L2 verifier contract | PLANNED |
+  | Base L2 verifier | PLANNED |
   | Threshold key recovery | PLANNED |
   | Gasless mode, multi-chain | PLANNED |
 

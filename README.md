@@ -48,7 +48,7 @@
   | `simulateProof()` SHA-256 stand-in for RISC Zero | SIMULATED |
   | `submitIntent()` returns `txHash: null` with notice | SIMULATED |
   | Ghost Relay network submission | PLANNED |
-  | Base L2 verifier contract | PLANNED |
+  | Base L2 verifier | PLANNED |
   | Threshold key recovery | PLANNED |
   | Gasless mode | PLANNED |
   | Multi-chain support | PLANNED |
@@ -57,7 +57,7 @@
 
   ZHAD0 is in design phase. There is:
 
-  * No mainnet deployment of the verifier contract.
+  * No mainnet deployment of the verifier.
   * No externally audited circuit.
   * No live Ghost Relayer network.
   * No public `@zhad0/sdk` or `@zhad0/cli` package on npm yet.
