@@ -1,74 +1,191 @@
 # ZHAD0 SDK
 
-  > ZK-powered privacy layer for autonomous AI agents on Base L2.
-  >
-  > **Status: DESIGN_PREVIEW `v0.0.0-design.1`.** Real AES-256-GCM client-side encryption is shipped today. ZK proofs and the Ghost Relay network are simulated until mainnet is live.
+Privacy-preserving on-chain intent submission for AI agent frameworks on Base L2.
 
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-  [![Status](https://img.shields.io/badge/status-live-00d26a.svg)](https://zhad0.io)
-  [![Network](https://img.shields.io/badge/network-Base__L2-0052ff.svg)](https://base.org)
+Every intent is encrypted with **AES-256-GCM** and proven with a real **Schnorr NIZK** over secp256k1 before it ever leaves your agent process. No intent contents are visible to relayers, observers, or MEV bots.
 
-  ## What is ZHAD0
+## Packages
 
-  ZHAD0 is a privacy middleware for AI agents running financial strategies on Base L2. Agent intents are encrypted off-chain, accompanied by a zero-knowledge proof of validity, and executed through a decentralised Ghost Relay network. The agent wallet, the intent contents, and the strategy stay invisible to MEV bots and on-chain observers.
+| Package | Description |
+|---|---|
+| [`@zhad0/sdk`](./packages/sdk) | Core client, adapters for 7 AI frameworks |
+| [`@zhad0/proof`](./packages/proof) | Schnorr secp256k1 NIZK proof primitives |
 
-  This repository ships the **client side** of that stack: a TypeScript SDK and a CLI that demonstrate the planned API surface with real cryptography where possible.
+## Installation
 
-  ## Packages
+```bash
+npm install @zhad0/sdk
+# or
+pnpm add @zhad0/sdk
+# or
+yarn add @zhad0/sdk
+```
 
-  | Package | Description |
-  |---|---|
-  | [`@zhad0/sdk`](./packages/sdk) | TypeScript SDK. Real Web Crypto AES-256-GCM. Simulated ZK proof helpers. `wrapAgent()` Proxy. |
-  | [`@zhad0/cli`](./packages/cli) | Command line tool: `zhad0 encrypt`, `zhad0 simulate`, `zhad0 status`. |
+## Quickstart
 
-  ## Quick start
+```typescript
+import { Zhad0Client } from '@zhad0/sdk';
 
-  ```bash
-  git clone https://github.com/zhad0/zhad0-sdk.git
-  cd zhad0-sdk
-  pnpm install
-  pnpm build
+const client = new Zhad0Client({ network: 'base-mainnet' });
 
-  # Inspect the SDK
-  node packages/cli/bin/zhad0.mjs status
+const receipt = await client.submitIntent({
+  action: 'SWAP',
+  tokenIn: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',  // USDC
+  tokenOut: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+  amountIn: '1000000',     // 1 USDC (6 decimals)
+  amountOutMin: '450000000000000', // min 0.00045 WETH
+});
 
-  # Encrypt a sample intent
-  echo '{"action":"SWAP","tokenIn":"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913","tokenOut":"0x4200000000000000000000000000000000000006","amountIn":"1000000000"}' > intent.json
-  node packages/cli/bin/zhad0.mjs simulate intent.json --pretty
-  ```
+console.log(receipt.status);    // "PROVEN_OK"
+console.log(receipt.verified);  // true
+console.log(receipt.proveMs);   // ~2ms (Schnorr, client-side)
+```
 
-  ## What is real today
+## Framework Adapters
 
-  | Capability | Status |
-  |---|---|
-  | Client-side AES-256-GCM (Web Crypto SubtleCrypto) | LIVE |
-  | Canonical JSON intent hashing (SHA-256) | LIVE |
-  | `wrapAgent()` Proxy adds `executeIntent` to any object | LIVE |
-  | Zod-validated intent schemas | LIVE |
-  | `simulateProof()` SHA-256 stand-in for RISC Zero | SIMULATED |
-  | `submitIntent()` returns `txHash: null` with notice | SIMULATED |
-  | Ghost Relay network submission | PLANNED |
-  | Base L2 verifier | PLANNED |
-  | Threshold key recovery | PLANNED |
-  | Gasless mode | PLANNED |
-  | Multi-chain support | PLANNED |
+### LangChain
 
-  ## Honesty notice
+```typescript
+import { Zhad0Client } from '@zhad0/sdk';
+import { createZhad0Tool } from '@zhad0/sdk/langchain';
+import { createReactAgent } from '@langchain/langgraph/prebuilt';
 
-  ZHAD0 is in design phase. There is:
+const client = new Zhad0Client({ network: 'base-mainnet' });
+const agent = await createReactAgent({
+  llm,
+  tools: [createZhad0Tool(client)],
+});
+```
 
-  * No mainnet deployment of the verifier.
-  * No externally audited circuit.
-  * No live Ghost Relayer network.
-  * No public `@zhad0/sdk` or `@zhad0/cli` package on npm yet.
-  * No `ZHAD0` token distribution.
+### Vercel AI SDK
 
-  Anything labelled `LIVE` in this repo describes code that is actually implemented and executes deterministically against Web Crypto. Anything labelled `PLANNED` is design specification only.
+```typescript
+import { Zhad0Client } from '@zhad0/sdk';
+import { createZhad0AiTool } from '@zhad0/sdk/vercel-ai';
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
-  ## Project
+const client = new Zhad0Client({ network: 'base-mainnet' });
 
-  * Website: [zhad0.io](https://zhad0.io)
-  * Organization: [github.com/zhad0](https://github.com/zhad0)
-  * Issues: [github.com/zhad0/zhad0-sdk/issues](https://github.com/zhad0/zhad0-sdk/issues)
-  * License: [MIT](./LICENSE)
-  
+const result = await generateText({
+  model: openai('gpt-4o'),
+  tools: { privateIntent: createZhad0AiTool(client) },
+  prompt: 'Swap 100 USDC to WETH privately',
+});
+```
+
+### Coinbase AgentKit
+
+```typescript
+import { Zhad0Client } from '@zhad0/sdk';
+import { createZhad0Action } from '@zhad0/sdk/agentkit';
+
+const client = new Zhad0Client({ network: 'base-mainnet' });
+const action = createZhad0Action(client);
+// agentkit.addAction(action);
+```
+
+### Eliza (ai16z / elizaOS)
+
+```typescript
+import { Zhad0Client } from '@zhad0/sdk';
+import { createZhad0ElizaPlugin } from '@zhad0/sdk/eliza';
+
+const client = new Zhad0Client({ network: 'base-mainnet' });
+// character.plugins.push(createZhad0ElizaPlugin(client));
+```
+
+### Virtuals Protocol GAME
+
+```typescript
+import { Zhad0Client } from '@zhad0/sdk';
+import { createZhad0GameFunction } from '@zhad0/sdk/virtuals';
+import { GameWorker } from '@virtuals-protocol/game';
+
+const client = new Zhad0Client({ network: 'base-mainnet' });
+const worker = new GameWorker({
+  functions: [createZhad0GameFunction(client)],
+});
+```
+
+### Autogen (Microsoft) — server-assisted
+
+```typescript
+import { createZhad0AutogenTool } from '@zhad0/sdk/autogen';
+
+const tool = createZhad0AutogenTool({ apiUrl: 'https://zhad0.io/api' });
+// Register with your Autogen Node.js bridge.
+// For native Python agents, use python/zhad0_sdk/autogen_tool.py
+```
+
+### CrewAI — server-assisted
+
+```typescript
+import { createZhad0CrewAiTool } from '@zhad0/sdk/crewai';
+
+const tool = createZhad0CrewAiTool({ apiUrl: 'https://zhad0.io/api' });
+// For native Python agents, use python/zhad0_sdk/crewai_tool.py
+```
+
+> **Note:** LangChain, Vercel AI, AgentKit, Eliza, and Virtuals adapters generate ZK proofs client-side in your agent process. Autogen and CrewAI use server-assisted proof generation via the ZHAD0 relay API (`POST /api/intents/assisted`).
+
+## Cryptography
+
+### What is live today
+
+- **AES-256-GCM** intent encryption via the Web Crypto API (SubtleCrypto). A per-intent 96-bit IV is generated with `crypto.getRandomValues`. Key material is derived via HKDF-SHA256.
+- **Schnorr NIZK over secp256k1** (Fiat-Shamir transform). The prover demonstrates knowledge of the secret scalar `x` behind the public commitment `P = x·G`, with the proof cryptographically bound to the intent's public inputs (intent hash, nonce, gas estimate, gas ceiling). The verifier learns nothing about `x`.
+- Proof verification is independent and deterministic: any party can call `verifyIntentProof(proof)` without contacting the relay.
+
+### Mainnet target
+
+- **RISC Zero Groth16 zkVM** circuit: all validity constraints (gas ceiling, schema, nonce monotonicity) enforced inside the zkVM and verifiable by a Solidity verifier on Base.
+- **BLS12-381 threshold DKG** (2-of-3 Ghost Relayer cohort): no single party holds the decryption key.
+
+### Using proof primitives directly
+
+```typescript
+import {
+  generateIntentProof,
+  verifyIntentProof,
+  commitmentFromSecret,
+  PROOF_SCHEME,
+} from '@zhad0/proof';
+
+const proof = generateIntentProof({
+  secretMaterial: 'your-secret',
+  publicInputs: {
+    intentHash: '0xabc...',
+    nonce: 0,
+    gasEstimate: 180_000,
+    gasCeiling: 2_000_000,
+  },
+});
+
+const result = verifyIntentProof(proof);
+console.log(result.valid); // true
+```
+
+## Status
+
+| Feature | Status |
+|---|---|
+| AES-256-GCM intent encryption | Live |
+| Schnorr secp256k1 NIZK proofs | Live |
+| Off-chain Ghost Relay network | Live |
+| 7 framework adapters | Live |
+| On-chain settlement (Base) | Launching at mainnet |
+| $ZHAD0 token and staking | Launching at mainnet |
+| RISC Zero Groth16 circuit | Launching at mainnet |
+| On-chain governance | Launching at mainnet |
+
+## Links
+
+- Website: [zhad0.io](https://zhad0.io)
+- SDK docs: [zhad0.io/sdk](https://zhad0.io/sdk)
+- Whitepaper: [zhad0.io/whitepaper](https://zhad0.io/whitepaper)
+- Network: [zhad0.io/network](https://zhad0.io/network)
+
+## License
+
+MIT — see [LICENSE](./LICENSE)

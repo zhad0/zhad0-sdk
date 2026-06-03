@@ -1,12 +1,5 @@
-node_modules
-  dist
-  *.tsbuildinfo
-  .DS_Store
-  .env
-  .env.*
-  !.env.example
-  .vscode
-  .idea
-  coverage
-  *.log
-  
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.local

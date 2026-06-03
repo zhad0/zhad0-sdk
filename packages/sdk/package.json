@@ -1,57 +1,49 @@
 {
   "name": "@zhad0/sdk",
-  "version": "0.0.0-design.1",
-  "description": "ZK-powered privacy SDK for AI agents on Base L2. Real AES-256-GCM via Web Crypto; ZK proofs and Ghost Relay submission are simulated until mainnet is live.",
+  "version": "0.1.0",
+  "description": "ZHAD0 Protocol SDK — privacy-preserving on-chain intents with real Schnorr ZK proofs and AES-256-GCM encryption for AI agent frameworks",
+  "author": "Zhad0 <protocol@zhad0.io>",
   "license": "MIT",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhad0/zhad0-sdk.git",
+    "directory": "packages/sdk"
   },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
+  "homepage": "https://zhad0.io/sdk",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./adapters": "./src/adapters/index.ts",
+    "./langchain": "./src/adapters/langchain.ts",
+    "./vercel-ai": "./src/adapters/vercel-ai.ts",
+    "./agentkit": "./src/adapters/agentkit.ts",
+    "./eliza": "./src/adapters/eliza.ts",
+    "./virtuals": "./src/adapters/virtuals.ts",
+    "./autogen": "./src/adapters/autogen.ts",
+    "./crewai": "./src/adapters/crewai.ts"
+  },
   "keywords": [
-    "zhad0",
     "zk",
     "zero-knowledge",
     "privacy",
-    "ai-agents",
+    "intent",
     "base",
-    "base-l2",
-    "encryption",
-    "aes-gcm",
-    "web-crypto",
-    "ghost-relay",
-    "mev-protection"
+    "ethereum",
+    "langchain",
+    "eliza",
+    "agentkit",
+    "vercel-ai",
+    "virtuals",
+    "autogen",
+    "crewai",
+    "ai-agent",
+    "mev-protection",
+    "schnorr",
+    "zhad0"
   ],
-  "homepage": "https://zhad0.io",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zhad0/zhad0-sdk.git",
-    "directory": "packages/sdk"
-  },
-  "bugs": {
-    "url": "https://github.com/zhad0/zhad0-sdk/issues"
-  },
-  "author": "zhad0",
-  "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean"
-  },
   "dependencies": {
-    "zod": "^3.23.8"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": ">=18"
+    "@zhad0/proof": "workspace:*",
+    "zod": "^3.25.0"
   }
 }
