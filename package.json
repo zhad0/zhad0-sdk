@@ -1,18 +1,58 @@
 {
-  "name": "zhad0-sdk",
-  "private": true,
-  "description": "ZHAD0 Protocol SDK monorepo",
-  "author": "Zhad0 <protocol@zhad0.io>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zhad0/zhad0-sdk.git"
+  "name": "@zhad0/sdk",
+  "version": "0.1.0",
+  "description": "ZHAD0 Protocol SDK — ZK privacy layer for AI agents on Base",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./langchain": {
+      "import": "./dist/adapters/langchain.mjs",
+      "require": "./dist/adapters/langchain.cjs"
+    },
+    "./vercel-ai": {
+      "import": "./dist/adapters/vercel-ai.mjs",
+      "require": "./dist/adapters/vercel-ai.cjs"
+    },
+    "./agentkit": {
+      "import": "./dist/adapters/agentkit.mjs",
+      "require": "./dist/adapters/agentkit.cjs"
+    },
+    "./eliza": {
+      "import": "./dist/adapters/eliza.mjs",
+      "require": "./dist/adapters/eliza.cjs"
+    },
+    "./virtuals": {
+      "import": "./dist/adapters/virtuals.mjs",
+      "require": "./dist/adapters/virtuals.cjs"
+    },
+    "./autogen": {
+      "import": "./dist/adapters/autogen.mjs",
+      "require": "./dist/adapters/autogen.cjs"
+    },
+    "./crewai": {
+      "import": "./dist/adapters/crewai.mjs",
+      "require": "./dist/adapters/crewai.cjs"
+    }
   },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "scripts": {
-    "typecheck": "pnpm -r run typecheck",
-    "build": "pnpm -r run build"
+    "build": "node build.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@workspace/zhad0-proof": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "@types/node": "catalog:",
+    "esbuild": "catalog:"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhad0/zhad0-sdk"
   }
 }
